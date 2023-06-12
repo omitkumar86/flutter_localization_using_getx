@@ -8,7 +8,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'di_container.dart' as di;
 import 'localization/app_localization.dart';
 
-void main() async{
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await di.init();
   runApp(const MyApp());
