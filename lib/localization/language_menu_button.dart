@@ -9,6 +9,10 @@ class LanguageMenuButton extends GetView<LocaleController> {
   @override
   Widget build(BuildContext context) {
     return PopupMenuButton(
+      shape: RoundedRectangleBorder(
+        borderRadius:
+            BorderRadius.circular(5.r), // Set your desired border radius
+      ),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
@@ -32,7 +36,14 @@ class LanguageMenuButton extends GetView<LocaleController> {
       offset: Offset(0, 30),
       itemBuilder: (context) => controller.optionsLocales.entries.map((e) {
         return PopupMenuItem(
-            value: e.key, child: Text("${e.value['description']}"));
+            height: 0.h,
+            padding: EdgeInsets.only(left: 0, top: 0, bottom: 0, right: 0),
+            value: e.key,
+            child: Container(
+                padding: EdgeInsets.only(top: 10.h, bottom: 10.h),
+                //color: Colors.blueGrey,
+                alignment: Alignment.center,
+                child: Text("${e.value['description']}")));
       }).toList(),
       onSelected: (newValue) {
         controller.updateLocale(newValue);
