@@ -1,31 +1,36 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_localization_using_getx/localization/storage_service.dart';
 import 'package:get/get_state_manager/get_state_manager.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:get/get.dart';
 
 class LocaleController extends GetxController {
-  Locale? _locale;
-  SharedPreferences? _prefs;
+  final storage = Get.find<StorageService>();
+  final RxString local = Get.locale.toString().obs;
 
-  LocaleProvider() {
-    _locale = Locale('en'); // Set the default language
-    _initPreferences();
-  }
+  final Map<String, dynamic> optionsLocales = {
+    'en_US': {
+      'languageCode': 'en',
+      'countryCode': 'US',
+      'description': 'English',
+    },
+    'bn_BD': {
+      'languageCode': 'bn',
+      'countryCode': 'BD',
+      'description': 'Bengali',
+    },
+    'hi_IN': {
+      'languageCode': 'hi',
+      'countryCode': 'IN',
+      'description': 'Hindi',
+    },
+  };
 
-  Locale? get locale => _locale;
-
-  void _initPreferences() async {
-    _prefs = await SharedPreferences.getInstance();
-    final languageCode = _prefs?.getString('languageCode');
-    if (languageCode != null) {
-      _locale = Locale(languageCode);
-      update();
-    }
-  }
-
-  Future<void> setLanguage(String languageCode) async {
-    _locale = Locale(languageCode);
-    await _prefs?.setString('languageCode', languageCode);
-    update();
+  void updateLocale(String key) {
+    final String languageCode = optionsLocales[key]['languageCode'];
+    final String countryCode = optionsLocales[key]['countryCode'];
+    Get.updateLocale(Locale(languageCode, countryCode));
+    local.value = Get.locale.toString();
+    storage.write("languageCode", languageCode);
+    storage.write("countryCode", countryCode);
   }
 }
